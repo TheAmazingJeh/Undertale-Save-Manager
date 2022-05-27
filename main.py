@@ -11,14 +11,17 @@ def open_file(file_name):
             return file.read()
     except FileNotFoundError:
         return ""
+
 def save_file(file_name, data):
     with open(file_name, 'w') as file:
         file.write(data)
+
 def try_to_delete(file_name):
     try:
         os.remove(file_name)
     except FileNotFoundError:
         pass
+
 def backup_save(new_name):
     if not os.path.isdir(loc+f"\\Saves\\{new_name}"):
         os.makedirs(loc+f"\\Saves\\{new_name}")
@@ -28,6 +31,7 @@ def backup_save(new_name):
     save_file(loc+f"\\Saves\\{new_name}\\file8",open_file(location_data["data"] + "\\file8"))
     save_file(loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(location_data["data"] + "\\undertale.ini"))
     print(f"\nSave backed up as '{new_name}'\n")
+
 def write_save(backup_name):
     if not os.path.exists(loc+f"\\Saves\\{backup_name}"):
         print("No save with that name was found\n")
@@ -48,6 +52,7 @@ def write_save(backup_name):
     save_file(location_data["data"] + "\\file8",open_file(loc+f"\\Saves\\{backup_name}\\file8"))
     save_file(location_data["data"] + "\\undertale.ini",open_file(loc+f"\\Saves\\{backup_name}\\undertale.ini"))
     print(f"\nSave '{backup_name}' loaded\n")
+    
 def list_saves():
     saves = os.listdir(loc+"\\Saves")
     print("\n")
