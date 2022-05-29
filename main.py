@@ -57,7 +57,7 @@ def list_saves():
     saves = os.listdir(loc+"\\Saves")
     print("\n")
     for i in range(len(saves)):
-        print(f"{saves[i]}")
+        print(f"• {saves[i]}")
     print("\n")
 
 if __name__ == "__main__":
