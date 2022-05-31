@@ -32,7 +32,11 @@ def backup_save(new_name):
     save_file(loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(location_data["data"] + "\\undertale.ini"))
     print(f"\nSave backed up as '{new_name}'\n")
 
-def write_save(backup_name):
+def get_saves():
+    saves = os.listdir(loc+"\\Saves")
+    return saves
+
+def write_save_cli(backup_name):
     if not os.path.exists(loc+f"\\Saves\\{backup_name}"):
         print("No save with that name was found\n")
         return
@@ -42,6 +46,10 @@ def write_save(backup_name):
         if oversave == "n":
             backup_save(input("Please enter a name for the old save >>>   "))
 
+    write_save(backup_name)
+    print(f"\nSave '{backup_name}' loaded\n")
+
+def write_save(backup_name):
     try_to_delete(location_data["data"] + "\\file0")
     try_to_delete(location_data["data"] + "\\file9")
     try_to_delete(location_data["data"] + "\\undertale.ini")
@@ -51,8 +59,7 @@ def write_save(backup_name):
     save_file(location_data["data"] + "\\file9",open_file(loc+f"\\Saves\\{backup_name}\\file9"))
     save_file(location_data["data"] + "\\file8",open_file(loc+f"\\Saves\\{backup_name}\\file8"))
     save_file(location_data["data"] + "\\undertale.ini",open_file(loc+f"\\Saves\\{backup_name}\\undertale.ini"))
-    print(f"\nSave '{backup_name}' loaded\n")
-    
+
 def list_saves():
     saves = os.listdir(loc+"\\Saves")
     print("\n")
@@ -72,7 +79,7 @@ if __name__ == "__main__":
         if choice == "1":
             backup_save(input("Please enter a name for the save >>>   "))
         elif choice == "2":
-            write_save(input("Please enter the name of the save to write >>>   "))
+            write_save_cli(input("Please enter the name of the save to write >>>   "))
         elif choice == "3":
             list_saves()
             input("Press enter to continue >>>   ")
