@@ -113,8 +113,16 @@ Button(w, text="Quit", command=sys.exit).grid(row=3, column=1, sticky=N)
 Label(w, text="   ").grid(row=0, column=2)
 
 
+
 saves_list = Listbox(w, height=10, width=50)
 saves_list.grid(row=0, column=3, rowspan=5)
+
+scrollbar = Scrollbar(w)
+scrollbar.grid(row=0, column=4,rowspan=5, sticky=N+S)
+
+saves_list.config(yscrollcommand = scrollbar.set)
+scrollbar.config(command = saves_list.yview)
+
 
 refresh_saves()
 
