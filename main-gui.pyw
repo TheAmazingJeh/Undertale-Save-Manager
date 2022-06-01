@@ -105,15 +105,16 @@ def refresh_saves():
     for items in items_for_saves:
         saves_list.insert(END,items)
 
-Button(w, text="Backup Loaded Save", command=backup_save_gui).grid(row=0, column=0)
-Button(w, text="Load Selected Save", command=write_save_gui).grid(row=1, column=0)
-Button(w, text="Refresh Saves List", command=refresh_saves).grid(row=2, column=0)
-Button(w, text="Quit", command=sys.exit).grid(row=3, column=0)
-Label(w, text="   ").grid(row=0, column=1)
+Label(w, text="   ").grid(row=0, column=0)
+Button(w, text="Backup Loaded Save", command=backup_save_gui).grid(row=0, column=1, sticky=N)
+Button(w, text="Load Selected Save", command=write_save_gui).grid(row=1, column=1, sticky=N)
+Button(w, text="Refresh Saves List", command=refresh_saves).grid(row=2, column=1, sticky=N)
+Button(w, text="Quit", command=sys.exit).grid(row=3, column=1, sticky=N)
+Label(w, text="   ").grid(row=0, column=2)
 
 
 saves_list = Listbox(w, height=10, width=50)
-saves_list.grid(row=0, column=2, rowspan=5)
+saves_list.grid(row=0, column=3, rowspan=5)
 
 refresh_saves()
 
