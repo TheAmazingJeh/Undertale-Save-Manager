@@ -89,6 +89,7 @@ w = Tk()
 w.title("Save Manager")
 if os.path.exists(loc+"\\UNDERTALE.ico"):
     w.iconbitmap("UNDERTALE.ico")
+    
 w.configure()
 w.resizable(False, False)
 
