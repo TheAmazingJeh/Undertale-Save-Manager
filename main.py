@@ -1,6 +1,11 @@
-import os
+import os,sys
 
-loc = os.path.dirname(os.path.realpath(__file__))
+if getattr(sys, 'frozen', False):
+    loc = os.path.dirname(sys.executable)
+    os.chdir(loc)
+else:
+    loc = os.path.dirname(os.path.realpath(__file__))
+    
 location_data = {
     "exe":"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale",
     "data":os.getenv("LOCALAPPDATA")+"\\UNDERTALE"
@@ -38,7 +43,7 @@ def get_saves():
 
 def write_save_cli(backup_name):
     if not os.path.exists(loc+f"\\Saves\\{backup_name}"):
-        print("No save with that name was found\n")
+        print("No save with that name was found\nNo file at path: "+loc+f"\\Saves\\{backup_name}")
         return
     data = location_data["data"]
     if os.path.exists(f"{data}\\undertale.ini"):

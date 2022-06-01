@@ -1,9 +1,72 @@
 from tkinter import *
-import os
+import os, sys
 from tkinter.messagebox import  askyesnocancel, showinfo
 from tkinter.simpledialog import askstring
 
-from main import *
+if getattr(sys, 'frozen', False):
+    loc = os.path.dirname(sys.executable)
+    os.chdir(loc)
+else:
+    loc = os.path.dirname(os.path.realpath(__file__))
+
+location_data = {
+    "exe":"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale",
+    "data":os.getenv("LOCALAPPDATA")+"\\UNDERTALE"
+}
+def open_file(file_name):      
+    try:
+        with open(file_name, 'r') as file:
+            return file.read()
+    except FileNotFoundError:
+        return ""
+
+def save_file(file_name, data):
+    with open(file_name, 'w') as file:
+        file.write(data)
+
+def try_to_delete(file_name):
+    try:
+        os.remove(file_name)
+    except FileNotFoundError:
+        pass
+
+def backup_save(new_name):
+    if not os.path.isdir(loc+f"\\Saves\\{new_name}"):
+        os.makedirs(loc+f"\\Saves\\{new_name}")
+
+    save_file(loc+f"\\Saves\\{new_name}\\file0",open_file(location_data["data"] + "\\file0"))
+    save_file(loc+f"\\Saves\\{new_name}\\file9",open_file(location_data["data"] + "\\file9"))
+    save_file(loc+f"\\Saves\\{new_name}\\file8",open_file(location_data["data"] + "\\file8"))
+    save_file(loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(location_data["data"] + "\\undertale.ini"))
+    print(f"\nSave backed up as '{new_name}'\n")
+
+def get_saves():
+    saves = os.listdir(loc+"\\Saves")
+    return saves
+
+    if not os.path.exists(loc+f"\\Saves\\{backup_name}"):
+        print("No save with that name was found\n")
+        return
+    data = location_data["data"]
+    if os.path.exists(f"{data}\\undertale.ini"):
+        oversave = input("A save already exists. Do you want to overwrite it? (y/n) >>>   ")
+        if oversave == "n":
+            backup_save(input("Please enter a name for the old save >>>   "))
+
+    write_save(backup_name)
+    print(f"\nSave '{backup_name}' loaded\n")
+
+def write_save(backup_name):
+    try_to_delete(location_data["data"] + "\\file0")
+    try_to_delete(location_data["data"] + "\\file9")
+    try_to_delete(location_data["data"] + "\\undertale.ini")
+    try_to_delete(location_data["data"] + "\\file8")
+    
+    save_file(location_data["data"] + "\\file0",open_file(loc+f"\\Saves\\{backup_name}\\file0"))
+    save_file(location_data["data"] + "\\file9",open_file(loc+f"\\Saves\\{backup_name}\\file9"))
+    save_file(location_data["data"] + "\\file8",open_file(loc+f"\\Saves\\{backup_name}\\file8"))
+    save_file(location_data["data"] + "\\undertale.ini",open_file(loc+f"\\Saves\\{backup_name}\\undertale.ini"))
+
 def write_save_gui():
     data = location_data["data"]
     if os.path.exists(f"{data}\\undertale.ini"):
@@ -25,9 +88,9 @@ def backup_save_gui():
         backup_save(new_save)
         showinfo("Success",f"Your Save, '{new_save}' has been backed up.")
 
-
 w = Tk()
 w.title("Save Manager")
+w.iconbitmap("UNDERTALE.ico")
 w.configure()
 w.resizable(False, False)
 
@@ -45,7 +108,7 @@ def refresh_saves():
 Button(w, text="Backup Loaded Save", command=backup_save_gui).grid(row=0, column=0)
 Button(w, text="Load Selected Save", command=write_save_gui).grid(row=1, column=0)
 Button(w, text="Refresh Saves List", command=refresh_saves).grid(row=2, column=0)
-Button(w, text="Quit", command=quit).grid(row=3, column=0)
+Button(w, text="Quit", command=sys.exit).grid(row=3, column=0)
 Label(w, text="   ").grid(row=0, column=1)
 
 
