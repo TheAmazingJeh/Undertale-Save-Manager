@@ -1,6 +1,6 @@
 from tkinter import *
 import os, sys
-from tkinter.messagebox import  askyesnocancel, showinfo
+from tkinter.messagebox import  askyesnocancel, showinfo, showerror, showwarning
 from tkinter.simpledialog import askstring
 
 if getattr(sys, 'frozen', False):
@@ -13,6 +13,15 @@ location_data = {
     "exe":"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale",
     "data":os.getenv("LOCALAPPDATA")+"\\UNDERTALE"
 }
+
+if not os.path.exists(location_data["data"]):
+    showerror("Error","No save file found.\nPlease make sure you have installed Undertale.")
+    sys.exit()
+if not os.path.exists(loc+"\\Saves"):
+    showerror("Error","No save folder exists. Please add one before running this program.")
+    sys.exit()
+    
+
 def open_file(file_name):      
     try:
         with open(file_name, 'r') as file:
@@ -43,18 +52,6 @@ def backup_save(new_name):
 def get_saves():
     saves = os.listdir(loc+"\\Saves")
     return saves
-
-    if not os.path.exists(loc+f"\\Saves\\{backup_name}"):
-        print("No save with that name was found\n")
-        return
-    data = location_data["data"]
-    if os.path.exists(f"{data}\\undertale.ini"):
-        oversave = input("A save already exists. Do you want to overwrite it? (y/n) >>>   ")
-        if oversave == "n":
-            backup_save(input("Please enter a name for the old save >>>   "))
-
-    write_save(backup_name)
-    print(f"\nSave '{backup_name}' loaded\n")
 
 def write_save(backup_name):
     try_to_delete(location_data["data"] + "\\file0")
@@ -90,7 +87,8 @@ def backup_save_gui():
 
 w = Tk()
 w.title("Save Manager")
-w.iconbitmap("UNDERTALE.ico")
+if os.path.exists(loc+"\\UNDERTALE.ico"):
+    w.iconbitmap("UNDERTALE.ico")
 w.configure()
 w.resizable(False, False)
 
