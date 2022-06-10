@@ -2,6 +2,10 @@ from tkinter import *
 import os, sys
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror, showwarning
 from tkinter.simpledialog import askstring
+try:
+    import pyi_splash
+except ImportError:
+    pass
 
 if getattr(sys, 'frozen', False):
     loc = os.path.dirname(sys.executable)
@@ -14,13 +18,20 @@ location_data = {
     "data":os.getenv("LOCALAPPDATA")+"\\UNDERTALE"
 }
 
+def close_splash():
+    try:
+        pyi_splash.close()
+    except NameError:
+        pass
+
 if not os.path.exists(location_data["data"]):
+    close_splash()
     showerror("Error","No save file found.\nPlease make sure you have installed Undertale.")
     sys.exit()
 if not os.path.exists(loc+"\\Saves"):
+    close_splash()
     showerror("Error","No save folder exists. Please add one before running this program.")
     sys.exit()
-    
 
 def open_file(file_name):      
     try:
@@ -88,11 +99,11 @@ def backup_save_gui():
 w = Tk()
 w.title("Save Manager")
 if os.path.exists(loc+"\\UNDERTALE.ico"):
-    w.iconbitmap("UNDERTALE.ico")
+    w.iconbitmap(loc+"\\UNDERTALE.ico")
     
 w.configure()
+w.eval('tk::PlaceWindow . centre')
 w.resizable(False, False)
-
 
 def GetSelectedSave():
     value=str((saves_list.get(ACTIVE)))
@@ -111,8 +122,6 @@ Button(w, text="Refresh Saves List", command=refresh_saves).grid(row=2, column=1
 Button(w, text="Quit", command=sys.exit).grid(row=3, column=1, sticky=N)
 Label(w, text="   ").grid(row=0, column=2)
 
-
-
 saves_list = Listbox(w, height=10, width=50)
 saves_list.grid(row=0, column=3, rowspan=5)
 
@@ -122,7 +131,8 @@ scrollbar.grid(row=0, column=4,rowspan=5, sticky=N+S)
 saves_list.config(yscrollcommand = scrollbar.set)
 scrollbar.config(command = saves_list.yview)
 
-
 refresh_saves()
+
+close_splash()
 
 w.mainloop()
