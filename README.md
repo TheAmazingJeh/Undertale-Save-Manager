@@ -2,6 +2,8 @@
 
 This is a program that can organise and backup saves for you using python!
 
+The only versions that are now being updated are `Undertale Save Manager 2.0.exe` and `main-gui.pyw`
+
 ## Installation
 
 Download all files and run `Undertale Save Manager 2.0.exe` to start the program.
