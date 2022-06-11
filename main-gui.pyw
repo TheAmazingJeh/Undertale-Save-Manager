@@ -1,5 +1,5 @@
 from tkinter import *
-import os, sys
+import os, sys, ctypes
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror, showwarning
 from tkinter.simpledialog import askstring
 try:
@@ -96,13 +96,20 @@ def backup_save_gui():
         backup_save(new_save)
         showinfo("Success",f"Your Save, '{new_save}' has been backed up.")
 
+def setwindowmiddle(wd,width, height):
+    user32 = ctypes.windll.user32
+    screensize = user32.GetSystemMetrics(78), user32.GetSystemMetrics(79)
+    middle = screensize[0] // 2, screensize[1] // 2
+    add = middle[0] - width // 2, middle[1] - height // 2
+    wd.geometry(f"{width}x{height}+{add[0]}+{add[1]}")
+
 w = Tk()
 w.title("Save Manager")
 if os.path.exists(loc+"\\UNDERTALE.ico"):
     w.iconbitmap(loc+"\\UNDERTALE.ico")
     
 w.configure()
-w.eval('tk::PlaceWindow . centre')
+setwindowmiddle(w,469,165)
 w.resizable(False, False)
 
 def GetSelectedSave():
