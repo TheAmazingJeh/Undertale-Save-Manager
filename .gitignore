@@ -1,3 +1,6 @@
 **/__pycache__
 **/test**
 **/make-exe.bat
+**/build/
+**/dist/
+**/*.spec
