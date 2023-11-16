@@ -17,7 +17,8 @@ def get_current_dir():
     else:
         loc = os.path.dirname(os.path.realpath(__file__))
 
-def close_splash(): # Closes the splash screen, if it exists (for pyinstaller)
+# Closes the splash screen, if it exists (for pyinstaller)
+def close_splash(): 
     try:
         pyi_splash.close()
     except NameError:
