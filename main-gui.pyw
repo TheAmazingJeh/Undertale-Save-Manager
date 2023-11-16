@@ -139,7 +139,7 @@ if os.path.exists(loc+"\\UNDERTALE.ico"):
     w.iconbitmap(loc+"\\UNDERTALE.ico")
     
 w.configure()
-setwindowmiddle(w,469,165)
+setwindowmiddle(w,464,220)
 w.resizable(False, False)
 
 def GetSelectedSave():
@@ -155,21 +155,31 @@ def refresh_saves(path):
     for items in items_for_saves:
         saves_list.insert(END,items)
 
-Button(w, text="Backup Loaded Save", command=backup_save_gui).grid(row=0, column=1, sticky=N, columnspan=2)
-Button(w, text="Load Selected Save", command=write_save_gui).grid(row=1, column=1, sticky=N, columnspan=2)
-Button(w, text="Refresh Saves List", command=lambda: refresh_saves(location_data["savesFolder"])).grid(row=2, column=1, sticky=N, columnspan=2)
-Button(w, text="Open Folder", command=open_folder).grid(row=3, column=1, sticky=N)
-Button(w, text="Back", command=back_folder).grid(row=3, column=2, sticky=N)
-Button(w, text="Quit", command=sys.exit).grid(row=4, column=1, sticky=N, columnspan=2)
+right_frame = Frame(w)
 
-saves_list = Listbox(w, height=10, width=50)
-saves_list.grid(row=0, column=3, rowspan=5)
+Button(right_frame, text="Backup Loaded Save", command=backup_save_gui).grid(row=0, column=1, sticky=E)
+Button(right_frame, text="Load Selected Save", command=write_save_gui).grid(row=1, column=1, sticky=E)
+Button(right_frame, text="Refresh Saves List", command=lambda: refresh_saves(location_data["savesFolder"])).grid(row=2, column=1, sticky=E)
+Button(right_frame, text="Quit", command=sys.exit).grid(row=5, column=1, sticky=E+N)
+right_frame.grid(row=0, column=0, padx=2, pady=2)
 
-scrollbar = Scrollbar(w)
-scrollbar.grid(row=0, column=4,rowspan=5, sticky=N+S)
+saves_frame = Frame(w)
 
+saves_list = Listbox(saves_frame, height=10, width=50)
+saves_list.grid(row=0, column=0)
+scrollbar = Scrollbar(saves_frame)
+scrollbar.grid(row=0, column=1, sticky=N+S)
 saves_list.config(yscrollcommand = scrollbar.set)
 scrollbar.config(command = saves_list.yview)
+
+saves_frame.grid(row=0, column=1, padx=10, pady=10, sticky=E)
+
+
+bottom_frame = Frame(w)
+Button(bottom_frame, text="Open Folder", command=open_folder).grid(row=0, column=0, sticky=W)
+Button(bottom_frame, text="Back", command=back_folder).grid(row=0, column=1, sticky=E)
+
+bottom_frame.grid(row=1, column=1, padx=10, sticky=E)
 
 refresh_saves(location_data["savesFolder"])
 
