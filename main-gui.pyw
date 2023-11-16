@@ -1,7 +1,7 @@
 from tkinter import *
 import os, sys, ctypes
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror, showwarning
-from tkinter.simpledialog import askstring, Dialog
+from tkinter.simpledialog import askstring
 
 # Tries to import the splash screen, but doesn't error if it doesn't exist (for pyinstaller)
 try: 
@@ -16,6 +16,7 @@ def get_current_dir():
         os.chdir(loc)
     else:
         loc = os.path.dirname(os.path.realpath(__file__))
+    return loc
 
 # Closes the splash screen, if it exists (for pyinstaller)
 def close_splash(): 
@@ -55,11 +56,6 @@ class UndertaleSaveManager(Tk):
             "savesFolderCONST": loc+"\\Saves"
         }
 
-        save_files = {
-            "pacifist":"https://drive.google.com/drive/folders/1r1tcKHqZcDSuHz0uIO8rTX6OwoozlMQ8",
-            "genocide": "https://drive.google.com/drive/folders/1S_oA-eTxlO3Gr8X0oXl9zzBz7XBwvH7Z"
-        }
-
         self.pre_start()
 
         # ----- Window Settings ------ #
@@ -77,7 +73,7 @@ class UndertaleSaveManager(Tk):
         Button(self.right_frame, text="Backup Loaded Save", command=self.backup_save_gui).grid(row=0, column=1, sticky=E)
         Button(self.right_frame, text="Load Selected Save", command=self.write_save_gui).grid(row=1, column=1, sticky=E)
         Button(self.right_frame, text="Refresh Saves List", command=self.refresh_saves).grid(row=2, column=1, sticky=E)
-        Button(self.right_frame, text="Download Save Files", command=self.download_saves).grid(row=4, column=1, sticky=E)
+        #Button(self.right_frame, text="Download Save Files", command=self.download_saves).grid(row=4, column=1, sticky=E)
         Button(self.right_frame, text="Quit", command=sys.exit).grid(row=5, column=1, sticky=E+N)
         
         self.right_frame.grid(row=0, column=0, padx=2, pady=2)
@@ -123,7 +119,7 @@ class UndertaleSaveManager(Tk):
         self.geometry(f"{width}x{height}+{add[0]}+{add[1]}")
 
     # Checks if a directory is a save or not
-    def is_save(self, path):
+    def is_save(self, path:str):
         f = []
         for (dirpath, dirnames, filenames) in os.walk(path):
             f.extend(filenames)
@@ -163,7 +159,7 @@ class UndertaleSaveManager(Tk):
             self.saves_list.insert(END,items)
 
     # Backs up the current save as specified name
-    def backup_save(self, new_name):
+    def backup_save(self, new_name:str):
         if not os.path.isdir(loc+f"\\Saves\\{new_name}"):
             os.makedirs(loc+f"\\Saves\\{new_name}")
 
@@ -181,7 +177,7 @@ class UndertaleSaveManager(Tk):
             showinfo("Success",f"Your Save, '{new_save}' has been backed up.")
 
     # Writes specified backup to the current save
-    def write_save(self, backup_name):
+    def write_save(self, backup_name:str):
         try_to_delete(self.location_data["data"] + "\\file0")
         try_to_delete(self.location_data["data"] + "\\file9")
         try_to_delete(self.location_data["data"] + "\\undertale.ini")
@@ -214,7 +210,7 @@ class UndertaleSaveManager(Tk):
             showinfo("Success",f"Your Save, '{self.get_selected_option()}' has been loaded.")
 
     # Gets all the saves in a folder (for the saves list)
-    def get_saves(self, path):
+    def get_saves(self, path:str):
         saves = os.listdir(path)
         for i in range(len(saves)):
             if not self.is_save(f"{self.location_data["savesFolder"]}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
