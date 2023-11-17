@@ -109,6 +109,8 @@ class UndertaleSaveManager(Tk):
             sys.exit()
         if not os.path.exists(loc+"\\Saves"):
             os.makedirs(loc+"\\Saves")
+        
+        close_splash()
 
     # Sets the window to the middle of the screen
     def set_window_middle(self, width:int, height:int):
@@ -213,7 +215,7 @@ class UndertaleSaveManager(Tk):
     def get_saves(self, path:str):
         saves = os.listdir(path)
         for i in range(len(saves)):
-            if not self.is_save(f"{self.location_data["savesFolder"]}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
+            if not self.is_save(f"{self.location_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
             else: saves[i] = "  [Save] " + saves[i]
         return saves
 
