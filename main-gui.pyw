@@ -1,7 +1,8 @@
 from tkinter import *
-import os, sys, ctypes
+import os, sys, ctypes, json
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror, showwarning
-from tkinter.simpledialog import askstring
+from tkinter.simpledialog import askstring, Dialog
+from tkinter.filedialog import askopenfilename
 
 # Tries to import the splash screen, but doesn't error if it doesn't exist (for pyinstaller)
 try: 
