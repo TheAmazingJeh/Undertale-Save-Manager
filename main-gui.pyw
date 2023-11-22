@@ -45,6 +45,39 @@ def try_to_delete(file_name): # Tries to delete a file, but doesn't error if it 
 
 # ----- Tkinter Classes ----- #
 
+class GameTypeSelect(Dialog):
+    def sel(self):
+        match self.radioVar.get():
+            case 1: self.file_select.config(state=DISABLED), self.file_label_truncated.config(state=DISABLED)
+            case 2: self.file_select.config(state=NORMAL), self.file_label_truncated.config(state=DISABLED)
+    def select_file(self):
+        self.fileName = askopenfilename(initialdir="C:\\Program Files (x86)\\Steam\\steamapps\\common\\UNDERTALE", filetypes=[("Executable", "*.exe")])
+        self.file_string_truncated.set("..."+self.fileName[-32:])
+    def body(self, master):
+        self.minsize(width=250, height=100)
+        self.fileName = ""
+        Label(master,text="Please select an option.").grid(sticky=W)
+
+        self.radioVar = IntVar()
+        self.r1 = Radiobutton(master, text="Open By Using Steam Link", variable=self.radioVar, value=1,command=self.sel)
+        self.r1.grid(row=1, sticky=W)
+
+        self.r2 = Radiobutton(master, text="Open By Directly Running File", variable=self.radioVar, value=2,command=self.sel)
+        self.r2.grid(row=2, sticky=W)
+        self.file_select = Button(master, text="Select File", command=self.select_file)
+        self.file_select.grid(row=2,column=1, sticky=W)
+
+        self.file_string_truncated = StringVar()
+        self.file_label_truncated = Entry(master, textvariable=self.file_string_truncated, width=40)
+        self.file_label_truncated.grid(row=3,column=0, columnspan=2,sticky=W, pady=5)
+
+        self.r1.invoke()
+    
+    def apply(self):
+        match self.radioVar.get():
+            case 1: self.result = ["Steam","start \"\" steam://rungameid/391540"]
+            case 2: self.fileName = f'explorer.exe "{loc}"' if self.fileName == "" else f'"{self.fileName}"'; self.result = ["Direct",self.fileName]
+        return
 class UndertaleSaveManager(Tk):
     def __init__(self):
         super().__init__()
@@ -99,6 +132,14 @@ class UndertaleSaveManager(Tk):
         self.scrollbar.config(command = self.saves_list.yview)
 
         self.saves_frame.grid(row=0, column=1, padx=10, pady=10, sticky=E)
+
+        #------- Bottom Left Buttons --------#
+        self.left_frame = Frame(self)
+
+        self.launchGameText.set(self.update_game_button())
+        Button(self.left_frame, textvariable=self.launchGameText, command=self.open_game).grid(row=0, column=0, sticky=W)
+
+        self.left_frame.grid(row=1, column=1, padx=10, sticky=W)
 
         #------- Bottom Buttons -------#
         self.bottom_frame = Frame(self)
