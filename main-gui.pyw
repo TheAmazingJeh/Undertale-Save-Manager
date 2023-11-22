@@ -325,13 +325,45 @@ class UndertaleSaveManager(Tk):
             self.write_save(self.get_selected_option())
             showinfo("Success",f"Your Save, '{self.get_selected_option()}' has been loaded.")
 
+    # Opens Settings
+    def open_settings(self):
+        settings = Settings(self, self.program_data)
+        settings = settings.result
+        self.launchGameText.set(self.update_game_button())
+        return
+    
+    def update_game_button(self): # Updates the game button text to display the current game launch type
+        match "GAMETYPE" in self.program_data:
+            case True: gameL = f" ({self.program_data['GAMETYPE'][0]})"
+            case _: gameL = ""
+        return "Launch Game"+gameL
+
     # Gets all the saves in a folder (for the saves list)
     def get_saves(self, path:str):
         saves = os.listdir(path)
         for i in range(len(saves)):
-            if not self.is_save(f"{self.location_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
+            if not self.is_save(f"{self.program_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
             else: saves[i] = "  [Save] " + saves[i]
         return saves
+
+
+
+    def get_game_type(self, w): # Prompts the user to select a game type
+        d = GameTypeSelect(w)
+        d = d.result
+        if d == None:
+            return self.program_data
+        self.program_data["GAMETYPE"] = d
+        with open(os.path.join(loc, 'config.json'), 'w') as f:
+            json.dump(self.program_data, f, indent=4)
+        self.launchGameText.set(self.update_game_button())
+        return self.program_data
+
+    def open_game(self): # Opens the game using the specified method
+        if not "GAMETYPE" in self.program_data:
+            self.program_data = self.get_game_type(w)
+        else:
+            os.system(self.program_data["GAMETYPE"][1])
 
 if __name__ == "__main__":
     loc = get_current_dir()
