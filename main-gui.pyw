@@ -137,6 +137,7 @@ class UndertaleSaveManager(Tk):
         #------- Bottom Left Buttons --------#
         self.left_frame = Frame(self)
 
+        self.launchGameText = StringVar()
         self.launchGameText.set(self.update_game_button())
         Button(self.left_frame, textvariable=self.launchGameText, command=self.open_game).grid(row=0, column=0, sticky=W)
 
