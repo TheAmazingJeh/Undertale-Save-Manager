@@ -146,8 +146,8 @@ class UndertaleSaveManager(Tk):
         #------- Bottom Buttons -------#
         self.bottom_frame = Frame(self)
 
-        Button(self.bottom_frame, text="Open Folder", command=self.open_folder).grid(row=0, column=0, sticky=W)
-        Button(self.bottom_frame, text="Back", command=self.back_folder).grid(row=0, column=1, sticky=E)
+        Button(self.bottom_frame, text="Open Folder", command=self.open_folder).grid(row=0, column=1, sticky=W)
+        Button(self.bottom_frame, text="Back", command=self.back_folder).grid(row=0, column=2, sticky=E)
 
         self.bottom_frame.grid(row=1, column=1, padx=10, sticky=E)
 
@@ -210,16 +210,16 @@ class UndertaleSaveManager(Tk):
 
     # Saves List - Opens selected Folder
     def open_folder(self):
-        if self.is_save(os.path.join(self.location_data["savesFolder"], self.get_selected_option())):
+        if self.is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
             showerror("Error","Selected option is a folder, not a save.")
             return
-        self.location_data["savesFolder"] = os.path.join(self.location_data["savesFolder"], self.get_selected_option())
+        self.program_data["savesFolder"] = os.path.join(self.program_data["savesFolder"], self.get_selected_option())
         self.refresh_saves()
 
     # Saves List - Goes back a folder
     def back_folder(self):
-        if self.location_data["savesFolder"] == self.location_data["savesFolderCONST"]: return
-        self.location_data["savesFolder"] = os.path.dirname(self.location_data["savesFolder"])
+        if self.program_data["savesFolder"] == self.program_data["savesFolderCONST"]: return
+        self.program_data["savesFolder"] = os.path.dirname(self.program_data["savesFolder"])
         self.refresh_saves()
 
     # Gets the selected option from the list
