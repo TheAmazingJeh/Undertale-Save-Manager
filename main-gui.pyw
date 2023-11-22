@@ -99,6 +99,7 @@ class UndertaleSaveManager(Tk):
 
         self.pre_start()
         self.create_window()
+        self.refresh_saves()
 
     def create_window(self):
         # ----- Window Settings ------ #
