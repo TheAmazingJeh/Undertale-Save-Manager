@@ -180,12 +180,12 @@ class UndertaleSaveManager(Tk):
 
     # Assorted Functions that need to be run before the window is created
     def pre_start(self):
-        if not os.path.exists(self.location_data["data"]): # Checks if the data folder exists
+        if not os.path.exists(self.program_data["data"]): # Checks if the data folder exists
             close_splash()
             showerror("Error","No save file found.\nPlease make sure you have installed Undertale & have ran it at least once.")
             sys.exit()
-        if not os.path.exists(loc+"\\Saves"):
-            os.makedirs(loc+"\\Saves")
+        if not os.path.exists(self.program_data["savesFolder"]):
+            os.makedirs(self.program_data["savesFolder"])
         
         close_splash()
 
@@ -233,7 +233,7 @@ class UndertaleSaveManager(Tk):
     # Clears the saves list and refreshes it
     def refresh_saves(self):
         self.saves_list.delete(0,END)
-        items_for_saves = self.get_saves(self.location_data["savesFolder"])
+        items_for_saves = self.get_saves(self.program_data["savesFolder"])
         for items in items_for_saves:
             self.saves_list.insert(END,items)
 
@@ -242,10 +242,10 @@ class UndertaleSaveManager(Tk):
         if not os.path.isdir(loc+f"\\Saves\\{new_name}"):
             os.makedirs(loc+f"\\Saves\\{new_name}")
 
-        save_file(loc+f"\\Saves\\{new_name}\\file0",open_file(self.location_data["data"] + "\\file0"))
-        save_file(loc+f"\\Saves\\{new_name}\\file9",open_file(self.location_data["data"] + "\\file9"))
-        save_file(loc+f"\\Saves\\{new_name}\\file8",open_file(self.location_data["data"] + "\\file8"))
-        save_file(loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(self.location_data["data"] + "\\undertale.ini"))
+        save_file(loc+f"\\Saves\\{new_name}\\file0",open_file(self.program_data["data"] + "\\file0"))
+        save_file(loc+f"\\Saves\\{new_name}\\file9",open_file(self.program_data["data"] + "\\file9"))
+        save_file(loc+f"\\Saves\\{new_name}\\file8",open_file(self.program_data["data"] + "\\file8"))
+        save_file(loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(self.program_data["data"] + "\\undertale.ini"))
         print(f"\nSave backed up as '{new_name}'\n")
 
     # Presents a GUI for backing up the current save
