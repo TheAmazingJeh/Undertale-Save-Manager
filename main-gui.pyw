@@ -49,19 +49,16 @@ class UndertaleSaveManager(Tk):
     def __init__(self):
         super().__init__()
 
-        self.location_data = {
-            "exe":"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale",
-            "data":os.getenv("LOCALAPPDATA")+"\\UNDERTALE",
-            "savesFolder": loc+"\\Saves",
-            "savesFolderCONST": loc+"\\Saves"
-        }
+            "data":os.path.join(os.getenv("LOCALAPPDATA"), "UNDERTALE"),
+            "savesFolder": os.path.join(loc, "Saves"),
+            "savesFolderCONST": os.path.join(loc, "Saves"),
 
         self.pre_start()
 
         # ----- Window Settings ------ #
         self.title("Save Manager")
-        if os.path.exists(loc+"\\UNDERTALE.ico"):
-            self.iconbitmap(loc+"\\UNDERTALE.ico")
+        if os.path.exists(os.path.join(loc,"UNDERTALE.ico")):
+            self.iconbitmap(os.path.join(loc, "UNDERTALE.ico"))
             
         self.configure()
         self.set_window_middle(464,220)
