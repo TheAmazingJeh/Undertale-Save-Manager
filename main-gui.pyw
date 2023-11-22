@@ -160,9 +160,9 @@ class UndertaleSaveManager(Tk):
         self.saves_frame = Frame(self)
 
         self.saves_list = Listbox(self.saves_frame, height=10, width=50)
-        self.saves_list.grid(row=0, column=0)
+        self.saves_list.grid(row=0, column=0, columnspan=3, sticky=W)
         self.scrollbar = Scrollbar(self.saves_frame)
-        self.scrollbar.grid(row=0, column=1, sticky=N+S)
+        self.scrollbar.grid(row=0, column=3, sticky=N+S)
         self.saves_list.config(yscrollcommand = self.scrollbar.set)
         self.scrollbar.config(command = self.saves_list.yview)
 
@@ -177,9 +177,11 @@ class UndertaleSaveManager(Tk):
 
         self.left_frame.grid(row=1, column=1, padx=10, sticky=W)
 
-        #------- Bottom Buttons -------#
+
+        #------- Bottom Right Buttons -------#
         self.bottom_frame = Frame(self)
 
+        Button(self.bottom_frame, text="Refresh", command=self.refresh_saves).grid(row=0, column=0, sticky=E)
         Button(self.bottom_frame, text="Open Folder", command=self.open_folder).grid(row=0, column=1, sticky=W)
         Button(self.bottom_frame, text="Back", command=self.back_folder).grid(row=0, column=2, sticky=E)
 
