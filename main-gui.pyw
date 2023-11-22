@@ -49,9 +49,20 @@ class UndertaleSaveManager(Tk):
     def __init__(self):
         super().__init__()
 
+        self.temp_config = self.load_config()
+
+        self.program_data = {
             "data":os.path.join(os.getenv("LOCALAPPDATA"), "UNDERTALE"),
             "savesFolder": os.path.join(loc, "Saves"),
             "savesFolderCONST": os.path.join(loc, "Saves"),
+            "exe":self.temp_config["exe"],
+        }
+        if "GAMETYPE" in self.temp_config:
+            self.program_data["GAMETYPE"] = self.temp_config["GAMETYPE"]
+        
+        del self.temp_config
+
+        self.save_config()
 
         self.pre_start()
 
@@ -95,8 +106,32 @@ class UndertaleSaveManager(Tk):
 
         self.bottom_frame.grid(row=1, column=1, padx=10, sticky=E)
 
-        #--------- Saves List ---------#
-        self.refresh_saves()
+    # Loads the config file
+    def load_config(self):
+        if not os.path.exists(os.path.join(loc, "config.json")):
+            with open(os.path.join(loc, "config.json"), 'w') as f:
+                defaultConfig = {
+                    "exe":None,
+                }
+                
+                json.dump({}, f, indent=4)
+        with open(os.path.join(loc, "config.json"), 'r') as f:
+            vars = json.load(f)
+            saveFlag = False
+            if "exe" not in vars:
+                vars["exe"] = None
+                saveFlag = True
+            if saveFlag:
+                with open(os.path.join(loc, "config.json"), 'w') as f:
+                    json.dump(vars, f, indent=4)
+        return vars
+        
+        
+
+    # Saves the config file
+    def save_config(self):
+        with open(os.path.join(loc, "config.json"), 'w') as f:
+            json.dump(self.program_data, f, indent=4)
 
     # Assorted Functions that need to be run before the window is created
     def pre_start(self):
