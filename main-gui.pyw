@@ -294,24 +294,24 @@ class UndertaleSaveManager(Tk):
 
     # Writes specified backup to the current save
     def write_save(self, backup_name:str):
-        try_to_delete(self.location_data["data"] + "\\file0")
-        try_to_delete(self.location_data["data"] + "\\file9")
-        try_to_delete(self.location_data["data"] + "\\undertale.ini")
-        try_to_delete(self.location_data["data"] + "\\file8")
+        try_to_delete(self.program_data["data"] + "\\file0")
+        try_to_delete(self.program_data["data"] + "\\file9")
+        try_to_delete(self.program_data["data"] + "\\undertale.ini")
+        try_to_delete(self.program_data["data"] + "\\file8")
         
-        save_file(self.location_data["data"] + "\\file0",open_file(self.location_data["savesFolder"] + f"\\{backup_name}\\file0"))
-        save_file(self.location_data["data"] + "\\file9",open_file(self.location_data["savesFolder"] + f"\\{backup_name}\\file9"))
-        save_file(self.location_data["data"] + "\\file8",open_file(self.location_data["savesFolder"] + f"\\{backup_name}\\file8"))
-        save_file(self.location_data["data"] + "\\undertale.ini",open_file(self.location_data["savesFolder"] + f"\\{backup_name}\\undertale.ini"))
+        save_file(self.program_data["data"] + "\\file0",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\file0"))
+        save_file(self.program_data["data"] + "\\file9",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\file9"))
+        save_file(self.program_data["data"] + "\\file8",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\file8"))
+        save_file(self.program_data["data"] + "\\undertale.ini",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\undertale.ini"))
 
     # Presents a GUI for writing a backup to the current save
     def write_save_gui(self):
         # Check if the selected save is a folder or a save
-        if not self.is_save(os.path.join(self.location_data["savesFolder"], self.get_selected_option())):
+        if not self.is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
             showerror("Error","You can't load a folder.")
             return
 
-        data = self.location_data["data"]
+        data = self.program_data["data"]
         if os.path.exists(f"{data}\\undertale.ini"):
             oversave = askyesnocancel("Warning","A save already exists. Do you want to overwrite it?")
             if oversave == False:
