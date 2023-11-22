@@ -65,7 +65,9 @@ class UndertaleSaveManager(Tk):
         self.save_config()
 
         self.pre_start()
+        self.create_window()
 
+    def create_window(self):
         # ----- Window Settings ------ #
         self.title("Save Manager")
         if os.path.exists(os.path.join(loc,"UNDERTALE.ico")):
