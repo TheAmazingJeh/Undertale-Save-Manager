@@ -78,6 +78,39 @@ class GameTypeSelect(Dialog):
             case 1: self.result = ["Steam","start \"\" steam://rungameid/391540"]
             case 2: self.fileName = f'explorer.exe "{loc}"' if self.fileName == "" else f'"{self.fileName}"'; self.result = ["Direct",self.fileName]
         return
+
+
+class Settings(Dialog):
+    def __init__(self, parent, cfg):
+        self.parent = parent
+        self.file_config = cfg
+        super().__init__(parent)
+
+    def reset_game_launch(self):
+        if "GAMETYPE" in self.file_config:
+            del self.file_config["GAMETYPE"]
+            with open(os.path.join(loc, "config.json"), 'w') as f:
+                json.dump(self.file_config, f, indent=4)
+
+    def open_saves_folder(self):
+        os.startfile(self.file_config["savesFolder"])
+
+    def open_active_save_folder(self):
+        os.startfile(self.file_config["data"])
+
+    def body(self, master):
+        self.minsize(width=250, height=10)
+        Button(master, text="Reset Game Launch Type", command=self.reset_game_launch).grid(row=0)
+        Button(master, text="Open Undertale Saves Folder", command=self.open_saves_folder).grid(row=1)
+        Button(master, text="Open Active Save Folder", command=self.open_active_save_folder).grid(row=2)
+    
+    def buttonbox(self):
+        box = Frame(self)
+        w = Button(box, text="Back", width=10, command=self.ok, default=ACTIVE)
+        w.pack(side=LEFT, padx=5, pady=5)
+        self.bind("<Return>", self.ok)
+        box.pack()
+
 class UndertaleSaveManager(Tk):
     def __init__(self):
         super().__init__()
@@ -111,12 +144,13 @@ class UndertaleSaveManager(Tk):
         self.set_window_middle(464,220)
         self.resizable(False, False)
 
-        #-------- Left Buttons --------#
+        #------ Top Left Buttons ------#
         self.right_frame = Frame(self)
 
         Button(self.right_frame, text="Backup Loaded Save", command=self.backup_save_gui).grid(row=0, column=1, sticky=E)
         Button(self.right_frame, text="Load Selected Save", command=self.write_save_gui).grid(row=1, column=1, sticky=E)
-        Button(self.right_frame, text="Refresh Saves List", command=self.refresh_saves).grid(row=2, column=1, sticky=E)
+        
+        Button(self.right_frame, text="Settings", command=self.open_settings).grid(row=3, column=1, sticky=E)
         #Button(self.right_frame, text="Download Save Files", command=self.download_saves).grid(row=4, column=1, sticky=E)
         Button(self.right_frame, text="Quit", command=sys.exit).grid(row=5, column=1, sticky=E+N)
         
