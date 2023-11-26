@@ -10,15 +10,6 @@ try:
 except ImportError:
     pass
 
-# Changes the working directory to the location of the script (for pyinstaller)
-def get_current_dir():
-    if getattr(sys, 'frozen', False):
-        loc = os.path.dirname(sys.executable)
-        os.chdir(loc)
-    else:
-        loc = os.path.dirname(os.path.realpath(__file__))
-    return loc
-
 # Closes the splash screen, if it exists (for pyinstaller)
 def close_splash(): 
     try:
@@ -90,7 +81,7 @@ class Settings(Dialog):
     def reset_game_launch(self):
         if "GAMETYPE" in self.file_config:
             del self.file_config["GAMETYPE"]
-            with open(os.path.join(loc, "config.json"), 'w') as f:
+            with open(os.path.join(self.loc, "config.json"), 'w') as f:
                 json.dump(self.file_config, f, indent=4)
 
     def open_saves_folder(self):
@@ -116,6 +107,7 @@ class UndertaleSaveManager(Tk):
     def __init__(self):
         super().__init__()
 
+        self.loc = self.get_current_dir()
         self.temp_config = self.load_config()
 
         self.program_data = {
@@ -135,11 +127,19 @@ class UndertaleSaveManager(Tk):
         self.create_window()
         self.refresh_saves()
 
+    def get_current_dir(self):
+        if getattr(sys, 'frozen', False):
+            loc = os.path.dirname(sys.executable)
+            os.chdir(loc)
+        else:
+            loc = os.path.dirname(os.path.realpath(__file__))
+        return loc
+
     def create_window(self):
         # ----- Window Settings ------ #
         self.title("Save Manager")
-        if os.path.exists(os.path.join(loc,"UNDERTALE.ico")):
-            self.iconbitmap(os.path.join(loc, "UNDERTALE.ico"))
+        if os.path.exists(os.path.join(self.loc,"UNDERTALE.ico")):
+            self.iconbitmap(os.path.join(self.loc, "UNDERTALE.ico"))
             
         self.configure()
         self.set_window_middle(464,220)
@@ -190,21 +190,21 @@ class UndertaleSaveManager(Tk):
 
     # Loads the config file
     def load_config(self):
-        if not os.path.exists(os.path.join(loc, "config.json")):
-            with open(os.path.join(loc, "config.json"), 'w') as f:
+        if not os.path.exists(os.path.join(self.loc, "config.json")):
+            with open(os.path.join(self.loc, "config.json"), 'w') as f:
                 defaultConfig = {
                     "exe":None,
                 }
                 
                 json.dump({}, f, indent=4)
-        with open(os.path.join(loc, "config.json"), 'r') as f:
+        with open(os.path.join(self.loc, "config.json"), 'r') as f:
             vars = json.load(f)
             saveFlag = False
             if "exe" not in vars:
                 vars["exe"] = None
                 saveFlag = True
             if saveFlag:
-                with open(os.path.join(loc, "config.json"), 'w') as f:
+                with open(os.path.join(self.loc, "config.json"), 'w') as f:
                     json.dump(vars, f, indent=4)
         return vars
         
@@ -212,7 +212,7 @@ class UndertaleSaveManager(Tk):
 
     # Saves the config file
     def save_config(self):
-        with open(os.path.join(loc, "config.json"), 'w') as f:
+        with open(os.path.join(self.loc, "config.json"), 'w') as f:
             json.dump(self.program_data, f, indent=4)
 
     # Assorted Functions that need to be run before the window is created
@@ -276,13 +276,13 @@ class UndertaleSaveManager(Tk):
 
     # Backs up the current save as specified name
     def backup_save(self, new_name:str):
-        if not os.path.isdir(loc+f"\\Saves\\{new_name}"):
-            os.makedirs(loc+f"\\Saves\\{new_name}")
+        if not os.path.isdir(self.loc+f"\\Saves\\{new_name}"):
+            os.makedirs(self.loc+f"\\Saves\\{new_name}")
 
-        save_file(loc+f"\\Saves\\{new_name}\\file0",open_file(self.program_data["data"] + "\\file0"))
-        save_file(loc+f"\\Saves\\{new_name}\\file9",open_file(self.program_data["data"] + "\\file9"))
-        save_file(loc+f"\\Saves\\{new_name}\\file8",open_file(self.program_data["data"] + "\\file8"))
-        save_file(loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(self.program_data["data"] + "\\undertale.ini"))
+        save_file(self.loc+f"\\Saves\\{new_name}\\file0",open_file(self.program_data["data"] + "\\file0"))
+        save_file(self.loc+f"\\Saves\\{new_name}\\file9",open_file(self.program_data["data"] + "\\file9"))
+        save_file(self.loc+f"\\Saves\\{new_name}\\file8",open_file(self.program_data["data"] + "\\file8"))
+        save_file(self.loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(self.program_data["data"] + "\\undertale.ini"))
         print(f"\nSave backed up as '{new_name}'\n")
 
     # Presents a GUI for backing up the current save
