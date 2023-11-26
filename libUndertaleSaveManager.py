@@ -6,6 +6,7 @@ from tkinter.simpledialog import askstring
 from libGameTypeSelect import GameTypeSelect
 from libSettingsMenu import Settings
 from libBasicFileFunctions import open_file, save_file, try_to_delete
+from libSaveFileOperations import backup_save
 from libPyinstallerExeUtils import close_splash
 
 class UndertaleSaveManager(Tk):
@@ -225,17 +226,6 @@ class UndertaleSaveManager(Tk):
         for items in items_for_saves:
             self.saves_list.insert(END,items)
 
-    # Backs up the current save as specified name
-    def backup_save(self, new_name:str):
-        if not os.path.isdir(self.loc+f"\\Saves\\{new_name}"):
-            os.makedirs(self.loc+f"\\Saves\\{new_name}")
-
-        save_file(self.loc+f"\\Saves\\{new_name}\\file0",open_file(self.program_data["data"] + "\\file0"))
-        save_file(self.loc+f"\\Saves\\{new_name}\\file9",open_file(self.program_data["data"] + "\\file9"))
-        save_file(self.loc+f"\\Saves\\{new_name}\\file8",open_file(self.program_data["data"] + "\\file8"))
-        save_file(self.loc+f"\\Saves\\{new_name}\\undertale.ini",open_file(self.program_data["data"] + "\\undertale.ini"))
-        print(f"\nSave backed up as '{new_name}'\n")
-
     # Presents a GUI for backing up the current save
     def backup_save_gui(self):
         # Ask the user for a name for the new save
@@ -249,7 +239,7 @@ class UndertaleSaveManager(Tk):
             return
         # If the user enters a name, backup the save
         else:
-            self.backup_save(new_save)
+            backup_save(new_save, self.program_data, self.loc)
             showinfo("Success",f"Your Save, '{new_save}' has been backed up.")
 
         self.refresh_saves()
