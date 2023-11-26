@@ -6,6 +6,7 @@ from tkinter.simpledialog import askstring
 from gameTypeSelect import GameTypeSelect
 from settingsMenu import Settings
 from basicFileFunctions import open_file, save_file, try_to_delete
+from pyinstallerExeUtils import close_splash
 
 class UndertaleSaveManager(Tk):
     def __init__(self):
