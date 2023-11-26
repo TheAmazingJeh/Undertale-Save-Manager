@@ -10,7 +10,7 @@ from libSaveFileOperations import backup_save, write_save
 from libPyinstallerExeUtils import close_splash, get_icon
 
 class UndertaleSaveManager(Tk):
-    def __init__(self):
+    def __init__(self, loc:str):
         # Initialize the window
         super().__init__()
         
@@ -18,7 +18,7 @@ class UndertaleSaveManager(Tk):
         self.withdraw()
 
         # Get the current directory
-        self.loc = self.get_current_dir()
+        self.loc = loc
         # Load the config file, and save it to a temporary variable so it can be accessed later
         self.temp_config = self.load_config()
 
@@ -48,18 +48,6 @@ class UndertaleSaveManager(Tk):
 
         # Show the window
         self.deiconify()
-
-    # Gets the current directory that the program is running in
-    def get_current_dir(self):
-        # If the program is frozen, get the directory of the executable
-        if getattr(sys, 'frozen', False):
-            loc = os.path.dirname(sys.executable)
-            # Change the working directory to the executable directory
-            os.chdir(loc)
-        else:
-            # Get the directory of the script
-            loc = os.path.dirname(os.path.realpath(__file__))
-        return loc
 
     # Creates the window
     def create_window(self):
