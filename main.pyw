@@ -1,7 +1,7 @@
 from tkinter import *
 import os, sys, ctypes, json
-from tkinter.messagebox import  askyesnocancel, showinfo, showerror, showwarning
-from tkinter.simpledialog import askstring, Dialog
+from tkinter.messagebox import  askyesnocancel, showinfo, showerror
+from tkinter.simpledialog import askstring
 
 from gameTypeSelect import GameTypeSelect
 from settingsMenu import Settings
