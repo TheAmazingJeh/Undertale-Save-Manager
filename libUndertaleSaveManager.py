@@ -6,7 +6,7 @@ from tkinter.simpledialog import askstring
 from libGameTypeSelect import GameTypeSelect
 from libSettingsMenu import Settings
 from libBasicFileFunctions import open_file, save_file, try_to_delete
-from libSaveFileOperations import backup_save
+from libSaveFileOperations import backup_save, write_save
 from libPyinstallerExeUtils import close_splash
 
 class UndertaleSaveManager(Tk):
@@ -244,18 +244,6 @@ class UndertaleSaveManager(Tk):
 
         self.refresh_saves()
 
-    # Writes specified backup to the current save
-    def write_save(self, backup_name:str):
-        try_to_delete(self.program_data["data"] + "\\file0")
-        try_to_delete(self.program_data["data"] + "\\file9")
-        try_to_delete(self.program_data["data"] + "\\undertale.ini")
-        try_to_delete(self.program_data["data"] + "\\file8")
-        
-        save_file(self.program_data["data"] + "\\file0",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\file0"))
-        save_file(self.program_data["data"] + "\\file9",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\file9"))
-        save_file(self.program_data["data"] + "\\file8",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\file8"))
-        save_file(self.program_data["data"] + "\\undertale.ini",open_file(self.program_data["savesFolder"] + f"\\{backup_name}\\undertale.ini"))
-
     # Presents a GUI for writing a backup to the current save
     def write_save_gui(self):
         # Check if the selected save is a folder or a save, if it's a folder, show an error and return
@@ -273,7 +261,7 @@ class UndertaleSaveManager(Tk):
                 new_save = askstring("Backup","Please enter a name for the old save, so it can be backed up.")
                 # If the user doesn't cancel, backup the save
                 if new_save != None:
-                    self.backup_save(new_save)
+                    backup_save(new_save, self.program_data, self.loc)
                 # If the user cancels, return
                 else:
                     return
@@ -282,7 +270,7 @@ class UndertaleSaveManager(Tk):
                 return
             
             # Write the save to the current save
-            self.write_save(self.get_selected_option())
+            write_save(self.get_selected_option(), self.program_data)
             # Show a success message
             showinfo("Success",f"Your Save, '{self.get_selected_option()}' has been loaded.")
 
