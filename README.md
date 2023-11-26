@@ -6,7 +6,7 @@ This is a program that can organise and backup saves for you using python!
 
 Download the most recent release from [here](https://github.com/TheAmazingJeh/Undertale-Save-Manager/releases/latest) and run it in its own folder.
 
-It is still possible to run the `.pyw` version as well if you have python and the relevant modules installed on your computer. To do this, download the source code (.zip) from [here](https://github.com/TheAmazingJeh/Undertale-Save-Manager/releases/latest), extract it and run `main-gui.pyw`.
+It is still possible to run the `.pyw` version as well if you have python and the relevant modules installed on your computer. To do this, download the source code (.zip) from [here](https://github.com/TheAmazingJeh/Undertale-Save-Manager/releases/latest), extract it and run `main.pyw`.
 
 
 
