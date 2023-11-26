@@ -338,6 +338,5 @@ class UndertaleSaveManager(Tk):
             os.system(self.program_data["GAMETYPE"][1])
 
 if __name__ == "__main__":
-    loc = get_current_dir()
     w = UndertaleSaveManager()
     w.mainloop()
