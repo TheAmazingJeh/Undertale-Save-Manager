@@ -252,6 +252,8 @@ class UndertaleSaveManager(Tk):
             self.backup_save(new_save)
             showinfo("Success",f"Your Save, '{new_save}' has been backed up.")
 
+        self.refresh_saves()
+
     # Writes specified backup to the current save
     def write_save(self, backup_name:str):
         try_to_delete(self.program_data["data"] + "\\file0")
