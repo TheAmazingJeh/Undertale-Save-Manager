@@ -76,8 +76,8 @@ class UndertaleSaveManager(Tk):
 
         self.program_data = {
             "data":os.path.join(os.getenv("LOCALAPPDATA"), "UNDERTALE"),
-            "savesFolder": os.path.join(loc, "Saves"),
-            "savesFolderCONST": os.path.join(loc, "Saves"),
+            "savesFolder": os.path.join(self.loc, "Saves"),
+            "savesFolderCONST": os.path.join(self.loc, "Saves"),
             "exe":self.temp_config["exe"],
         }
         if "GAMETYPE" in self.temp_config:
