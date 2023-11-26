@@ -37,8 +37,9 @@ def try_to_delete(file_name): # Tries to delete a file, but doesn't error if it 
         pass
 
 class Settings(Dialog):
-    def __init__(self, parent, cfg):
+    def __init__(self, parent, loc, cfg):
         self.parent = parent
+        self.loc = loc
         self.file_config = cfg
         super().__init__(parent)
 
@@ -291,7 +292,7 @@ class UndertaleSaveManager(Tk):
 
     # Opens Settings
     def open_settings(self):
-        settings = Settings(self, self.program_data)
+        settings = Settings(self, self.loc, self.program_data)
         settings = settings.result
         self.launchGameText.set(self.update_game_button())
         return
