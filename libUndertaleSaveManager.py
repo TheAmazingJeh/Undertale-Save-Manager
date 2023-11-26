@@ -3,10 +3,10 @@ from tkinter import Tk, Frame, Button, Listbox, Scrollbar, StringVar, END, ACTIV
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror
 from tkinter.simpledialog import askstring
 
-from gameTypeSelect import GameTypeSelect
-from settingsMenu import Settings
-from basicFileFunctions import open_file, save_file, try_to_delete
-from pyinstallerExeUtils import close_splash
+from libGameTypeSelect import GameTypeSelect
+from libSettingsMenu import Settings
+from libBasicFileFunctions import open_file, save_file, try_to_delete
+from libPyinstallerExeUtils import close_splash
 
 class UndertaleSaveManager(Tk):
     def __init__(self):

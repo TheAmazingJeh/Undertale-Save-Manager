@@ -1,5 +1,5 @@
 # Import the main window and run it
-from undertaleSaveManager import UndertaleSaveManager
+from libUndertaleSaveManager import UndertaleSaveManager
 
 if __name__ == "__main__":
     # Create the main window
