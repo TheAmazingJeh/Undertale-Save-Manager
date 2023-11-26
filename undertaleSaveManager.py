@@ -10,20 +10,30 @@ from pyinstallerExeUtils import close_splash
 
 class UndertaleSaveManager(Tk):
     def __init__(self):
+        # Initialize the window
         super().__init__()
 
+        # Get the current directory
         self.loc = self.get_current_dir()
+        # Load the config file, and save it to a temporary variable so it can be accessed later
         self.temp_config = self.load_config()
 
+        # Set the program data
         self.program_data = {
+            # Location of the Undertale data folder that contains the active save
             "data":os.path.join(os.getenv("LOCALAPPDATA"), "UNDERTALE"),
+            # Location of the folder that contains the backup saves
             "savesFolder": os.path.join(self.loc, "Saves"),
+            # Constant location of the folder that contains the backup saves
             "savesFolderCONST": os.path.join(self.loc, "Saves"),
+            # Location of the Undertale executable
             "exe":self.temp_config["exe"],
         }
+        # If the game type is in the config file, set it to the temporary gane type variable
         if "GAMETYPE" in self.temp_config:
             self.program_data["GAMETYPE"] = self.temp_config["GAMETYPE"]
         
+        # Delete the temporary config variable
         del self.temp_config
 
         self.save_config()
@@ -32,25 +42,30 @@ class UndertaleSaveManager(Tk):
         self.create_window()
         self.refresh_saves()
 
+    # Gets the current directory that the program is running in
     def get_current_dir(self):
+        # If the program is frozen, get the directory of the executable
         if getattr(sys, 'frozen', False):
             loc = os.path.dirname(sys.executable)
+            # Change the working directory to the executable directory
             os.chdir(loc)
         else:
+            # Get the directory of the script
             loc = os.path.dirname(os.path.realpath(__file__))
         return loc
 
+    # Creates the window
     def create_window(self):
-        # ----- Window Settings ------ #
+        # Set the window title and icon
         self.title("Save Manager")
         if os.path.exists(os.path.join(self.loc,"UNDERTALE.ico")):
             self.iconbitmap(os.path.join(self.loc, "UNDERTALE.ico"))
-            
-        self.configure()
+        
+        # Set the window size and make it unresizable
         self.set_window_middle(464,220)
         self.resizable(False, False)
 
-        #------ Top Left Buttons ------#
+        # Set the right frame, which contains the buttons to backup and load saves as well as other buttons
         self.right_frame = Frame(self)
 
         Button(self.right_frame, text="Backup Loaded Save", command=self.backup_save_gui).grid(row=0, column=1, sticky=E)
@@ -62,7 +77,7 @@ class UndertaleSaveManager(Tk):
         
         self.right_frame.grid(row=0, column=0, padx=2, pady=2)
 
-        #--------- Saves List ---------#
+        # Set the saves frame, which contains the list of saves
         self.saves_frame = Frame(self)
 
         self.saves_list = Listbox(self.saves_frame, height=10, width=50)
@@ -74,7 +89,7 @@ class UndertaleSaveManager(Tk):
 
         self.saves_frame.grid(row=0, column=1, padx=10, pady=10, sticky=E)
 
-        #------- Bottom Left Buttons --------#
+        # Set the left frame, which contains the button to open the game
         self.left_frame = Frame(self)
 
         self.launchGameText = StringVar()
@@ -84,7 +99,7 @@ class UndertaleSaveManager(Tk):
         self.left_frame.grid(row=1, column=1, padx=10, sticky=W)
 
 
-        #------- Bottom Right Buttons -------#
+        # Set the bottom frame, which contains the buttons to refresh the saves list, open the folder, and go back a folder
         self.bottom_frame = Frame(self)
 
         Button(self.bottom_frame, text="Refresh", command=self.refresh_saves).grid(row=0, column=0, sticky=E)
@@ -95,54 +110,74 @@ class UndertaleSaveManager(Tk):
 
     # Loads the config file
     def load_config(self):
+        # If the config file doesn't exist, create it
         if not os.path.exists(os.path.join(self.loc, "config.json")):
             with open(os.path.join(self.loc, "config.json"), 'w') as f:
                 defaultConfig = {
                     "exe":None,
                 }
-                
+                # Write the default config to the config file
                 json.dump({}, f, indent=4)
+
+        # Load the config file
         with open(os.path.join(self.loc, "config.json"), 'r') as f:
+            # Set the config file to a variable
             vars = json.load(f)
             saveFlag = False
+            # If the exe isn't in the config file, set it to None and save the config file
             if "exe" not in vars:
                 vars["exe"] = None
                 saveFlag = True
+            # If the config has changed, save the config file
             if saveFlag:
                 with open(os.path.join(self.loc, "config.json"), 'w') as f:
                     json.dump(vars, f, indent=4)
+        # Return the config file
         return vars
 
     # Saves the config file
     def save_config(self):
+        # Save the config file
         with open(os.path.join(self.loc, "config.json"), 'w') as f:
             json.dump(self.program_data, f, indent=4)
 
     # Assorted Functions that need to be run before the window is created
     def pre_start(self):
-        if not os.path.exists(self.program_data["data"]): # Checks if the data folder exists
+        # Checks if the data folder exists
+        if not os.path.exists(self.program_data["data"]):
+            # If it doesn't, show an error and exit
             close_splash()
             showerror("Error","No save file found.\nPlease make sure you have installed Undertale & have ran it at least once.")
             sys.exit()
+        # Checks if the saves folder exists
         if not os.path.exists(self.program_data["savesFolder"]):
+            # If it doesn't, create it
             os.makedirs(self.program_data["savesFolder"])
         
+        # Close the splash screen
         close_splash()
 
     # Sets the window to the middle of the screen
     def set_window_middle(self, width:int, height:int):
+        # Get the current user
         user32 = ctypes.windll.user32
-        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) # Multi Monitor Fix
+        # Get the screen size, x and y
+        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+        # Get the middle of the screen
         middle = screensize[0] // 2, screensize[1] // 2
+        # Get the middle of the window
         add = middle[0] - width // 2, middle[1] - height // 2
+        # Set the window size and position
         self.geometry(f"{width}x{height}+{add[0]}+{add[1]}")
 
     # Checks if a directory is a save or not
     def is_save(self, path:str):
         f = []
+        # Get the files in the directory
         for (dirpath, dirnames, filenames) in os.walk(path):
             f.extend(filenames)
             break
+        # If the directory contains any files, it's a save
         if len(f) > 0:
             return True
         else:
@@ -150,30 +185,43 @@ class UndertaleSaveManager(Tk):
 
     # Saves List - Opens selected Folder
     def open_folder(self):
+        # Check if the selected save is a folder or a save
         if self.is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
+            # If it's a save, show an error and return
             showerror("Error","Selected option is a folder, not a save.")
             return
+        # Set the saves folder to the selected folder
         self.program_data["savesFolder"] = os.path.join(self.program_data["savesFolder"], self.get_selected_option())
+        # Refresh the saves list, with the new saves folder
         self.refresh_saves()
 
     # Saves List - Goes back a folder
     def back_folder(self):
+        # Check if the current saves folder is the constant saves folder, if it is, return
         if self.program_data["savesFolder"] == self.program_data["savesFolderCONST"]: return
+        # Set the saves folder to the parent folder of the current saves folder
         self.program_data["savesFolder"] = os.path.dirname(self.program_data["savesFolder"])
+        # Refresh the saves list, with the new saves folder
         self.refresh_saves()
 
     # Gets the selected option from the list
     def get_selected_option(self):
+        # Get the selected option
         value=str((self.saves_list.get(ACTIVE)))
+        # Remove the save and folder tags
         value = value.replace("  [Save]","")
         value = value.replace("  [Folder]","")
         value = value.strip()
+        # Return the selected option
         return value
 
     # Clears the saves list and refreshes it
     def refresh_saves(self):
+        # Clear the saves list
         self.saves_list.delete(0,END)
+        # Get the saves in the current saves folder
         items_for_saves = self.get_saves(self.program_data["savesFolder"])
+        # Add the saves to the saves list
         for items in items_for_saves:
             self.saves_list.insert(END,items)
 
@@ -190,8 +238,17 @@ class UndertaleSaveManager(Tk):
 
     # Presents a GUI for backing up the current save
     def backup_save_gui(self):
+        # Ask the user for a name for the new save
         new_save = askstring("Backup","Please enter a name for the new save. Seperate folders with \\\\")
-        if new_save != None:
+        # If the user doesn't cancel, backup the save
+        if new_save == None:
+            return
+        # If the user doesn't enter a name, show an error
+        elif new_save == "":
+            showerror("Error","Please enter a name for the new save.")
+            return
+        # If the user enters a name, backup the save
+        else:
             self.backup_save(new_save)
             showinfo("Success",f"Your Save, '{new_save}' has been backed up.")
 
@@ -209,47 +266,68 @@ class UndertaleSaveManager(Tk):
 
     # Presents a GUI for writing a backup to the current save
     def write_save_gui(self):
-        # Check if the selected save is a folder or a save
+        # Check if the selected save is a folder or a save, if it's a folder, show an error and return
         if not self.is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
             showerror("Error","You can't load a folder.")
             return
 
+        # Get the current save directory
         data = self.program_data["data"]
+        # Check if the current save exists, if it does, ask the user if they want to overwrite it
         if os.path.exists(f"{data}\\undertale.ini"):
             oversave = askyesnocancel("Warning","A save already exists. Do you want to overwrite it?")
+            # If the user says no, ask them for a name for the old save, so it can be backed up
             if oversave == False:
                 new_save = askstring("Backup","Please enter a name for the old save, so it can be backed up.")
+                # If the user doesn't cancel, backup the save
                 if new_save != None:
                     self.backup_save(new_save)
+                # If the user cancels, return
                 else:
                     return
+            # If the user cancels, return
             if oversave != True and oversave != False:
                 return
+            
+            # Write the save to the current save
             self.write_save(self.get_selected_option())
+            # Show a success message
             showinfo("Success",f"Your Save, '{self.get_selected_option()}' has been loaded.")
 
     # Opens Settings
     def open_settings(self):
+        # Show the settings window
         settings = Settings(self, self.loc, self.program_data)
-        settings = settings.result
+        # Update the game launch button text, as the game type may have changed
         self.launchGameText.set(self.update_game_button())
-        return
-    
-    def update_game_button(self): # Updates the game button text to display the current game launch type
+
+    # Updates the game launch button text to display the current game launch type    
+    def update_game_button(self):
+        # Get the game type from the config
         match "GAMETYPE" in self.program_data:
+            # If the game type is set, set the game launch button text to display the game type
             case True: gameL = f" ({self.program_data['GAMETYPE'][0]})"
+            # If the game type isn't set, set the game launch button text to display nothing
             case _: gameL = ""
+        # Return the game launch button text
         return "Launch Game"+gameL
 
     # Gets all the saves in a folder (for the saves list)
     def get_saves(self, path:str):
+        # Get the saves in the folder
         saves = os.listdir(path)
+        # Add the save and folder tags to the saves
         for i in range(len(saves)):
+            # If the save is a folder, add the folder tag
             if not self.is_save(f"{self.program_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
+            # If the save is a save, add the save tag
             else: saves[i] = "  [Save] " + saves[i]
+
+        # Return the saves
         return saves
 
-    def get_game_type(self): # Prompts the user to select a game type
+    # Prompts the user to select a game type
+    def get_game_type(self):
         # Shows the game type select window
         window = GameTypeSelect(self, self.loc)
         result = window.result
@@ -265,7 +343,8 @@ class UndertaleSaveManager(Tk):
         # Return the config
         return self.program_data
 
-    def open_game(self): # Opens the game using the specified method
+    # Opens the game using the specified method
+    def open_game(self):
         # If the user hasn't selected a game type, prompt them to do so
         if not "GAMETYPE" in self.program_data:
             self.program_data = self.get_game_type()
