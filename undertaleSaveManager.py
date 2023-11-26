@@ -112,8 +112,6 @@ class UndertaleSaveManager(Tk):
                 with open(os.path.join(self.loc, "config.json"), 'w') as f:
                     json.dump(vars, f, indent=4)
         return vars
-        
-        
 
     # Saves the config file
     def save_config(self):
@@ -250,8 +248,6 @@ class UndertaleSaveManager(Tk):
             if not self.is_save(f"{self.program_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
             else: saves[i] = "  [Save] " + saves[i]
         return saves
-
-
 
     def get_game_type(self): # Prompts the user to select a game type
         # Shows the game type select window
