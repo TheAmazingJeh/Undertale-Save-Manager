@@ -1,5 +1,5 @@
-import os, sys, ctypes, json
-from tkinter import Tk, Frame, Button, Listbox, Scrollbar, StringVar, END, ACTIVE, E, W, N, S
+import os, sys, ctypes, json, base64
+from tkinter import Tk, Frame, Button, Listbox, Scrollbar, StringVar, END, ACTIVE, E, W, N, S, PhotoImage
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror
 from tkinter.simpledialog import askstring
 
@@ -7,7 +7,7 @@ from libGameTypeSelect import GameTypeSelect
 from libSettingsMenu import Settings
 from libBasicFileFunctions import open_file, save_file, try_to_delete
 from libSaveFileOperations import backup_save, write_save
-from libPyinstallerExeUtils import close_splash
+from libPyinstallerExeUtils import close_splash, get_icon
 
 class UndertaleSaveManager(Tk):
     def __init__(self):
@@ -65,8 +65,11 @@ class UndertaleSaveManager(Tk):
     def create_window(self):
         # Set the window title and icon
         self.title("Save Manager")
-        if os.path.exists(os.path.join(self.loc,"UNDERTALE.ico")):
-            self.iconbitmap(os.path.join(self.loc, "UNDERTALE.ico"))
+        icon = get_icon()
+        if icon[0] == "base64":
+            self.wm_iconphoto(True, PhotoImage(data=icon[1]))
+        elif icon[0] == "path":
+            self.iconbitmap(icon[1])
         
         # Set the window size and make it unresizable
         self.set_window_middle(464,220)
