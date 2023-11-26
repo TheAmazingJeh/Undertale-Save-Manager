@@ -13,6 +13,9 @@ class UndertaleSaveManager(Tk):
     def __init__(self):
         # Initialize the window
         super().__init__()
+        
+        # Hide the window until it's ready to be shown
+        self.withdraw()
 
         # Get the current directory
         self.loc = self.get_current_dir()
@@ -42,6 +45,9 @@ class UndertaleSaveManager(Tk):
         self.pre_start()
         self.create_window()
         self.refresh_saves()
+
+        # Show the window
+        self.deiconify()
 
     # Gets the current directory that the program is running in
     def get_current_dir(self):
