@@ -313,20 +313,20 @@ class UndertaleSaveManager(Tk):
 
 
 
-    def get_game_type(self, w): # Prompts the user to select a game type
-        d = GameTypeSelect(w)
-        d = d.result
-        if d == None:
+    def get_game_type(self): # Prompts the user to select a game type
+        window = GameTypeSelect(self, self.loc)
+        result = window.result
+        if result == None:
             return self.program_data
-        self.program_data["GAMETYPE"] = d
-        with open(os.path.join(loc, 'config.json'), 'w') as f:
+        self.program_data["GAMETYPE"] = result
+        with open(os.path.join(self.loc, 'config.json'), 'w') as f:
             json.dump(self.program_data, f, indent=4)
         self.launchGameText.set(self.update_game_button())
         return self.program_data
 
     def open_game(self): # Opens the game using the specified method
         if not "GAMETYPE" in self.program_data:
-            self.program_data = self.get_game_type(w)
+            self.program_data = self.get_game_type()
         else:
             os.system(self.program_data["GAMETYPE"][1])
 
