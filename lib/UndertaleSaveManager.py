@@ -5,7 +5,6 @@ from tkinter.simpledialog import askstring
 
 from lib.popup.GameTypeSelect import GameTypeSelect
 from lib.popup.SettingsMenu import Settings
-from lib.BasicFileFunctions import open_file, save_file, try_to_delete
 from lib.filemanip.SaveFileOperations import backup_save, write_save
 from lib.PyinstallerExeUtils import close_splash, get_icon
 
