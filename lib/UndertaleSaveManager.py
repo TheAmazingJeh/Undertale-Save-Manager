@@ -1,4 +1,4 @@
-import os, sys, ctypes, json, base64
+import os, sys, json, base64
 from tkinter import Tk, Frame, Button, Listbox, Scrollbar, StringVar, END, ACTIVE, E, W, N, S, PhotoImage
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror
 from tkinter.simpledialog import askstring
@@ -7,6 +7,7 @@ from lib.popup.GameTypeSelect import GameTypeSelect
 from lib.popup.SettingsMenu import Settings
 from lib.filemanip.SaveFileOperations import backup_save, write_save
 from lib.PyinstallerExeUtils import close_splash, get_icon
+from lib.windowmanip.SetWindowMiddle import set_window_middle
 
 class UndertaleSaveManager(Tk):
     def __init__(self, loc:str):
@@ -59,7 +60,7 @@ class UndertaleSaveManager(Tk):
             self.iconbitmap(icon[1])
         
         # Set the window size and make it unresizable
-        self.set_window_middle(464,220)
+        set_window_middle(self, 464,220)
         self.resizable(False, False)
 
         # Set the right frame, which contains the buttons to backup and load saves as well as other buttons
@@ -153,19 +154,6 @@ class UndertaleSaveManager(Tk):
         
         # Close the splash screen
         close_splash()
-
-    # Sets the window to the middle of the screen
-    def set_window_middle(self, width:int, height:int):
-        # Get the current user
-        user32 = ctypes.windll.user32
-        # Get the screen size, x and y
-        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-        # Get the middle of the screen
-        middle = screensize[0] // 2, screensize[1] // 2
-        # Get the middle of the window
-        add = middle[0] - width // 2, middle[1] - height // 2
-        # Set the window size and position
-        self.geometry(f"{width}x{height}+{add[0]}+{add[1]}")
 
     # Checks if a directory is a save or not
     def is_save(self, path:str):
