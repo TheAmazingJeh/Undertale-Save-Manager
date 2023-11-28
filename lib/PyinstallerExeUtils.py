@@ -1,4 +1,4 @@
-import sys, os
+import sys
 
 # Tries to import the splash screen, but doesn't error if it doesn't exist (for pyinstaller)
 try: 
