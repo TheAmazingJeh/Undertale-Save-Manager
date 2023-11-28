@@ -8,6 +8,7 @@ from lib.popup.SettingsMenu import Settings
 from lib.filemanip.SaveFileOperations import backup_save, write_save
 from lib.PyinstallerExeUtils import close_splash, get_icon
 from lib.windowmanip.SetWindowMiddle import set_window_middle
+from lib.filemanip.FileValidation import is_save
 
 class UndertaleSaveManager(Tk):
     def __init__(self, loc:str):
@@ -155,23 +156,10 @@ class UndertaleSaveManager(Tk):
         # Close the splash screen
         close_splash()
 
-    # Checks if a directory is a save or not
-    def is_save(self, path:str):
-        f = []
-        # Get the files in the directory
-        for (dirpath, dirnames, filenames) in os.walk(path):
-            f.extend(filenames)
-            break
-        # If the directory contains any files, it's a save
-        if len(f) > 0:
-            return True
-        else:
-            return False
-
     # Saves List - Opens selected Folder
     def open_folder(self):
         # Check if the selected save is a folder or a save
-        if self.is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
+        if is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
             # If it's a save, show an error and return
             showerror("Error","Selected option is a folder, not a save.")
             return
@@ -231,7 +219,7 @@ class UndertaleSaveManager(Tk):
     # Presents a GUI for writing a backup to the current save
     def write_save_gui(self):
         # Check if the selected save is a folder or a save, if it's a folder, show an error and return
-        if not self.is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
+        if not is_save(os.path.join(self.program_data["savesFolder"], self.get_selected_option())):
             showerror("Error","You can't load a folder.")
             return
 
@@ -283,7 +271,7 @@ class UndertaleSaveManager(Tk):
         # Add the save and folder tags to the saves
         for i in range(len(saves)):
             # If the save is a folder, add the folder tag
-            if not self.is_save(f"{self.program_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
+            if not is_save(f"{self.program_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
             # If the save is a save, add the save tag
             else: saves[i] = "  [Save] " + saves[i]
 
