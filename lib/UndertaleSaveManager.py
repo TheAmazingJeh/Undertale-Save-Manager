@@ -1,4 +1,4 @@
-import os, sys, json, base64
+import os, sys, json
 from tkinter import Tk, Frame, Button, Listbox, Scrollbar, StringVar, END, ACTIVE, E, W, N, S, PhotoImage
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror
 from tkinter.simpledialog import askstring
