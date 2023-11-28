@@ -226,7 +226,7 @@ class UndertaleSaveManager(Tk):
         # Get the current save directory
         data = self.program_data["data"]
         # Check if the current save exists, if it does, ask the user if they want to overwrite it
-        if os.path.exists(f"{data}\\undertale.ini"):
+        if os.path.exists(os.path.join(data, "undertale.ini")):
             oversave = askyesnocancel("Warning","A save already exists. Do you want to overwrite it?")
             # If the user says no, ask them for a name for the old save, so it can be backed up
             if oversave == False:
@@ -271,7 +271,7 @@ class UndertaleSaveManager(Tk):
         # Add the save and folder tags to the saves
         for i in range(len(saves)):
             # If the save is a folder, add the folder tag
-            if not is_save(f"{self.program_data['savesFolder']}\\{saves[i]}"): saves[i] = "  [Folder] " + saves[i]
+            if not is_save(os.path.join(self.program_data['savesFolder'], saves[i])): saves[i] = "  [Folder] " + saves[i]
             # If the save is a save, add the save tag
             else: saves[i] = "  [Save] " + saves[i]
 
