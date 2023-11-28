@@ -69,9 +69,8 @@ class UndertaleSaveManager(Tk):
 
         Button(self.right_frame, text="Backup Loaded Save", command=self.backup_save_gui).grid(row=0, column=1, sticky=E)
         Button(self.right_frame, text="Load Selected Save", command=self.write_save_gui).grid(row=1, column=1, sticky=E)
-        
-        Button(self.right_frame, text="Settings", command=self.open_settings).grid(row=3, column=1, sticky=E)
-        #Button(self.right_frame, text="Download Save Files", command=self.download_saves).grid(row=4, column=1, sticky=E)
+        Button(self.right_frame, text="Download Save Files", command=self.download_save_gui).grid(row=3, column=1, sticky=E)
+        Button(self.right_frame, text="Settings", command=self.open_settings).grid(row=4, column=1, sticky=E)
         Button(self.right_frame, text="Quit", command=sys.exit).grid(row=5, column=1, sticky=E+N)
         
         self.right_frame.grid(row=0, column=0, padx=2, pady=2)
@@ -245,6 +244,9 @@ class UndertaleSaveManager(Tk):
             write_save(self.get_selected_option(), self.program_data)
             # Show a success message
             showinfo("Success",f"Your Save, '{self.get_selected_option()}' has been loaded.")
+
+    def download_save_gui(self):
+        pass
 
     # Opens Settings
     def open_settings(self):
