@@ -1,6 +1,6 @@
 import os
 
-from libBasicFileFunctions import open_file, save_file, try_to_delete
+from lib.BasicFileFunctions import open_file, save_file, try_to_delete
 
 # Backs up the current save as specified name
 def backup_save(new_name:str, program_data:dict, loc:str):

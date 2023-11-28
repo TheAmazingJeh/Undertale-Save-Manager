@@ -12,10 +12,8 @@ def get_current_dir():
         loc = os.path.dirname(os.path.realpath(__file__))
     return loc
 
-# Add the lib folder to the path, so that the program can find the modules
-sys.path.insert(0, "lib")
 # Import the main window and run it
-from lib.libUndertaleSaveManager import UndertaleSaveManager
+from lib.UndertaleSaveManager import UndertaleSaveManager
 
 
 if __name__ == "__main__":
