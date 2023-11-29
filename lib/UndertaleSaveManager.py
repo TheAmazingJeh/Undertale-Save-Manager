@@ -11,6 +11,13 @@ from lib.windowmanip.SetWindowMiddle import set_window_middle
 from lib.filemanip.FileValidation import is_save
 from lib.filemanip.ConfigFile import load_config
 
+# Saves the config file
+def save_config(loc, program_data):
+    # Save the config file
+    with open(os.path.join(loc, "config.json"), 'w') as f:
+        json.dump(program_data, f, indent=4)
+
+
 class UndertaleSaveManager(Tk):
     def __init__(self, loc:str):
         # Initialize the window
@@ -42,7 +49,7 @@ class UndertaleSaveManager(Tk):
         # Delete the temporary config variable
         del self.temp_config
 
-        self.save_config()
+        save_config(self.loc, self.program_data)
 
         self.pre_start()
         self.create_window()
@@ -107,11 +114,6 @@ class UndertaleSaveManager(Tk):
 
         self.bottom_frame.grid(row=1, column=1, padx=10, sticky=E)
 
-    # Saves the config file
-    def save_config(self):
-        # Save the config file
-        with open(os.path.join(self.loc, "config.json"), 'w') as f:
-            json.dump(self.program_data, f, indent=4)
 
     # Assorted Functions that need to be run before the window is created
     def pre_start(self):
