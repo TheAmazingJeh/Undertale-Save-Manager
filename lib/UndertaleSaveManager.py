@@ -260,8 +260,7 @@ class UndertaleSaveManager(Tk):
             return self.program_data
         # If the user selects a game type, save it to the config
         self.program_data["GAMETYPE"] = result
-        with open(os.path.join(self.loc, 'config.json'), 'w') as f:
-            json.dump(self.program_data, f, indent=4)
+        save_config(self.loc, self.program_data)
         # Update the game button text
         self.launchGameText.set(self.update_game_button())
         # Return the config
