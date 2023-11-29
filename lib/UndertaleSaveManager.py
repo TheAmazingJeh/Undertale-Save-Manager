@@ -1,4 +1,4 @@
-import os, sys, json
+import os, sys
 from tkinter import Tk, Frame, Button, Listbox, Scrollbar, StringVar, END, ACTIVE, E, W, N, S, PhotoImage
 from tkinter.messagebox import  askyesnocancel, showinfo, showerror
 from tkinter.simpledialog import askstring
@@ -107,7 +107,6 @@ class UndertaleSaveManager(Tk):
         Button(self.bottom_frame, text="Back", command=self.back_folder).grid(row=0, column=2, sticky=E)
 
         self.bottom_frame.grid(row=1, column=1, padx=10, sticky=E)
-
 
     # Assorted Functions that need to be run before the window is created
     def pre_start(self):
