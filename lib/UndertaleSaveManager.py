@@ -10,6 +10,33 @@ from lib.PyinstallerExeUtils import close_splash, get_icon
 from lib.windowmanip.SetWindowMiddle import set_window_middle
 from lib.filemanip.FileValidation import is_save
 
+# Loads the config file
+def load_config(loc:str):
+    # If the config file doesn't exist, create it
+    if not os.path.exists(os.path.join(loc, "config.json")):
+        with open(os.path.join(loc, "config.json"), 'w') as f:
+            defaultConfig = {
+                "exe":None,
+            }
+            # Write the default config to the config file
+            json.dump({}, f, indent=4)
+
+    # Load the config file
+    with open(os.path.join(loc, "config.json"), 'r') as f:
+        # Set the config file to a variable
+        vars = json.load(f)
+        saveFlag = False
+        # If the exe isn't in the config file, set it to None and save the config file
+        if "exe" not in vars:
+            vars["exe"] = None
+            saveFlag = True
+        # If the config has changed, save the config file
+        if saveFlag:
+            with open(os.path.join(loc, "config.json"), 'w') as f:
+                json.dump(vars, f, indent=4)
+    # Return the config file
+    return vars
+
 class UndertaleSaveManager(Tk):
     def __init__(self, loc:str):
         # Initialize the window
@@ -21,7 +48,7 @@ class UndertaleSaveManager(Tk):
         # Get the current directory
         self.loc = loc
         # Load the config file, and save it to a temporary variable so it can be accessed later
-        self.temp_config = self.load_config()
+        self.temp_config = load_config(self.loc)
 
         # Set the program data
         self.program_data = {
@@ -105,33 +132,6 @@ class UndertaleSaveManager(Tk):
         Button(self.bottom_frame, text="Back", command=self.back_folder).grid(row=0, column=2, sticky=E)
 
         self.bottom_frame.grid(row=1, column=1, padx=10, sticky=E)
-
-    # Loads the config file
-    def load_config(self):
-        # If the config file doesn't exist, create it
-        if not os.path.exists(os.path.join(self.loc, "config.json")):
-            with open(os.path.join(self.loc, "config.json"), 'w') as f:
-                defaultConfig = {
-                    "exe":None,
-                }
-                # Write the default config to the config file
-                json.dump({}, f, indent=4)
-
-        # Load the config file
-        with open(os.path.join(self.loc, "config.json"), 'r') as f:
-            # Set the config file to a variable
-            vars = json.load(f)
-            saveFlag = False
-            # If the exe isn't in the config file, set it to None and save the config file
-            if "exe" not in vars:
-                vars["exe"] = None
-                saveFlag = True
-            # If the config has changed, save the config file
-            if saveFlag:
-                with open(os.path.join(self.loc, "config.json"), 'w') as f:
-                    json.dump(vars, f, indent=4)
-        # Return the config file
-        return vars
 
     # Saves the config file
     def save_config(self):
