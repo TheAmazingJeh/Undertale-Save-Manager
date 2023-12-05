@@ -6,10 +6,10 @@ from tkinter.simpledialog import askstring
 from lib.popup.GameTypeSelect import GameTypeSelect
 from lib.popup.SettingsMenu import Settings
 from lib.filemanip.SaveFileOperations import backup_save, write_save
-from lib.PyinstallerExeUtils import close_splash, get_icon
-from lib.windowmanip.SetWindowMiddle import set_window_middle
 from lib.filemanip.FileValidation import is_save
 from lib.filemanip.ConfigFile import load_config, save_config
+from lib.windowmanip.SetWindowMiddle import set_window_middle
+from lib.PyinstallerExeUtils import close_splash, get_icon
 
 
 class UndertaleSaveManager(Tk):
