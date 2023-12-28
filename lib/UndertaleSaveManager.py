@@ -5,6 +5,7 @@ from tkinter.simpledialog import askstring
 
 from lib.popup.GameTypeSelect import GameTypeSelect
 from lib.popup.SettingsMenu import Settings
+from lib.popup.DownloadSaves import ExampleSaves
 from lib.filemanip.SaveFileOperations import backup_save, write_save
 from lib.filemanip.FileValidation import is_save
 from lib.filemanip.ConfigFile import load_config, save_config
@@ -71,7 +72,7 @@ class UndertaleSaveManager(Tk):
 
         Button(self.right_frame, text="Backup Loaded Save", command=self.backup_save_gui).grid(row=0, column=1, sticky=E)
         Button(self.right_frame, text="Load Selected Save", command=self.write_save_gui).grid(row=1, column=1, sticky=E)
-        Button(self.right_frame, text="Download Save Files", command=self.download_save_gui).grid(row=3, column=1, sticky=E)
+        Button(self.right_frame, text="Load Example Save", command=self.load_example_save_gui).grid(row=3, column=1, sticky=E)
         Button(self.right_frame, text="Settings", command=self.open_settings).grid(row=4, column=1, sticky=E)
         Button(self.right_frame, text="Quit", command=sys.exit).grid(row=5, column=1, sticky=E+N)
         
@@ -214,8 +215,9 @@ class UndertaleSaveManager(Tk):
             # Show a success message
             showinfo("Success",f"Your Save, '{self.get_selected_option()}' has been loaded.")
 
-    def download_save_gui(self):
-        pass
+    def load_example_save_gui(self):
+        example = ExampleSaves(self, self.loc)
+        self.refresh_saves()
 
     # Opens Settings
     def open_settings(self):
